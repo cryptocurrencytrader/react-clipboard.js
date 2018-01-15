@@ -25,7 +25,8 @@
   "author": "Nihey Takizawa <nihey.takizawa@gmail.com>",
   "license": "CC0",
   "peerDependencies": {
-    "react": ">=15.5.0"
+    "react": ">=15.5.0",
+    "react-dom": ">=15.5.0"
   },
   "dependencies": {
     "clipboard": "^1.6.1",

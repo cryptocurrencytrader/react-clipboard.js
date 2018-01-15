@@ -1,25 +1,21 @@
 import React from 'react';
+import { findDOMNode } from 'react-dom';
 import PropTypes from 'prop-types';
 
 class ClipboardButton extends React.Component {
   static propTypes = {
     options: PropTypes.object,
-    type: PropTypes.string,
-    className: PropTypes.string,
-    style: PropTypes.object,
-    component: PropTypes.string,
+
+    component: PropTypes.oneOfType([
+      PropTypes.element,
+      PropTypes.string,
+    ]),
+
     children: PropTypes.oneOfType([
       PropTypes.element,
       PropTypes.string,
-      PropTypes.number,
-      PropTypes.object,
     ]),
   }
-
-  static defaultProps = {
-    onClick: function() {},
-  }
-
   /* Returns a object with all props that fulfill a certain naming pattern
    *
    * @param {RegExp} regexp - Regular expression representing which pattern
@@ -58,8 +54,7 @@ class ClipboardButton extends React.Component {
   componentDidMount() {
     // Support old API by trying to assign this.props.options first;
     const options = this.props.options || this.propsWith(/^option-/, true);
-    const element = React.version.match(/0\.13(.*)/)
-      ? this.refs.element.getDOMNode() : this.element;
+    const element = findDOMNode(this);
     const Clipboard = require('clipboard');
     this.clipboard = new Clipboard(element, options);
 
@@ -72,16 +67,22 @@ class ClipboardButton extends React.Component {
   render() {
     const attributes = {
       type: this.getType(),
-      className: this.props.className || '',
-      style: this.props.style || {},
-      ref: element => { this.element = element; },
-      onClick: this.props.onClick,
       ...this.propsWith(/^data-/),
       ...this.propsWith(/^button-/, true),
     };
 
-    return React.createElement(
-      this.getComponent(),
+    const component = this.getComponent();
+
+    if (typeof component === 'string') {
+      return React.createElement(
+        component,
+        attributes,
+        this.props.children
+      );
+    }
+
+    return React.cloneElement(
+      component,
       attributes,
       this.props.children
     );
