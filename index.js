@@ -93,7 +93,7 @@ class ClipboardButton extends React.Component {
       return this.props.type || 'button';
     }
     else {
-      return undefined;
+      return this.props.type || undefined;
     }
   }
 

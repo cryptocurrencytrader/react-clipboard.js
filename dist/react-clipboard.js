@@ -984,7 +984,7 @@ var ClipboardButton = function (_React$Component) {
       if (this.getComponent() === 'button' || this.getComponent() === 'input') {
         return this.props.type || 'button';
       } else {
-        return undefined;
+        return this.props.type || undefined;
       }
     }
   }, {
